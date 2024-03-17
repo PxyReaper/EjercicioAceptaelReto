@@ -6,6 +6,7 @@ package ej_mepilloeltoro;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -20,65 +21,61 @@ public class Ej_MePilloElToro {
     public static void main(String[] args) throws FileNotFoundException {
         File archivo = new File("src/ej_mepilloeltoro/datos");
         Scanner entrada = new Scanner(archivo);
+        ArrayList<String> autor = new ArrayList<>();
+        ArrayList<Integer> evaluacion = new ArrayList<>();
         int numero = 0;
-        String[] autor;
+        String autores;
         String comprobacion;
-        int[] evaluacion;
-
+       
+        int posicion = 0;
         numero = entrada.nextInt();
         entrada.nextLine();
         while (numero != 0)
         {
-
-            autor = new String[numero];
-            evaluacion = new int[numero];
-
-            for (int i = 0; i < autor.length; i++)
+            posicion = 0;
+            for (int i = 0; i <  numero; i++)
             {
-
-                autor[i] = entrada.nextLine();
+                autores = entrada.nextLine();
                 comprobacion = entrada.nextLine();
-
-                if (comprobacion.equals("CORRECTO"))
+                if (!autor.contains(autores))
                 {
-                    evaluacion[i]++;
-                } else
-                {
-                    evaluacion[i]--;
-
+                    autor.add(autores);
+                    evaluacion.add(0);
+                    posicion++;
+                
                 }
-                if (i != 0 && autor[i].equals(autor[i - 1]))
-                {
-                    evaluacion[i - 1] += evaluacion[i];
-                }
+                    if (comprobacion.equals("CORRECTO"))
+                    {
+                    
+                        evaluacion.set(posicion -1,evaluacion.get(posicion-1) +1);
+                    } else
+                    {
+                 
+                        evaluacion.set(posicion-1, evaluacion.get(posicion-1)-1 );
+
+                    }
 
             }
             mostrarAutor(autor, evaluacion);
 
             numero = Integer.parseInt(entrada.nextLine());
+            autor.clear();
+            evaluacion.clear();
 
         }
     }
 
-    public static void mostrarAutor(String[] arrayAutores, int[] arrayEvaluacion) {
-        for (int i = 0; i < arrayAutores.length; i++)
+    public static void mostrarAutor(ArrayList<String> arrayAutores, ArrayList<Integer> arrayEvaluacion) {
+        arrayAutores.sort(String::compareTo);
+        for (int i = 0; i < arrayAutores.size(); i++)
         {
-            if (i == 0)
+                if (arrayEvaluacion.get(i) != 0)
             {
-                 if (arrayEvaluacion[i] != 0 )
-            {
-                System.out.println(arrayAutores[i] + "," + " " + arrayEvaluacion[i]);
+                System.out.println(arrayAutores.get(i) +","  + " " + arrayEvaluacion.get(i));
             }
-            }else{
-            
-                if (arrayEvaluacion[i] != 0 &&  !arrayAutores[i].equals(arrayAutores[i-1]))
-                {
-                    System.out.println(arrayAutores[i] + "," + " " +arrayEvaluacion[i]);
-                }
-            
-            }
-           
         }
-        System.out.println("---");
+        System.out.println("------");
+
     }
+
 }
